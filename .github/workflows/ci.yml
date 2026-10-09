@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Set Xcode version
+        uses: ./.github/actions/set-xcode-version
+
+      - name: Run unit tests
+        run: |
+          xcodebuild \
+            -scheme 'Copilot for Xcode' \
+            -workspace 'Copilot for Xcode.xcworkspace' \
+            -testPlan TestPlan \
+            -configuration Debug \
+            -disableAutomaticPackageResolution \
+            test \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Archive app
+        run: |
+          xcodebuild \
+            -scheme 'Copilot for Xcode' \
+            -workspace 'Copilot for Xcode.xcworkspace' \
+            -archivePath build/Archives/CopilotForXcode.xcarchive \
+            -configuration Release \
+            -skipMacroValidation \
+            -disableAutomaticPackageResolution \
+            archive \
+            CODE_SIGNING_ALLOWED=NO

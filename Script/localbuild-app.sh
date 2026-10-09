@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Determine paths relative to script location
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -10,7 +11,7 @@ BUILD_DIR="${PROJECT_ROOT}/build"
 mkdir -p "${BUILD_DIR}"
 
 # Set variables
-APP_NAME="CopiloForXcode"
+APP_NAME="GitHub Copilot for Xcode"
 SCHEME_NAME="Copilot for Xcode"
 CONFIGURATION="Release"
 ARCHIVE_PATH="${BUILD_DIR}/Archives/${APP_NAME}.xcarchive"
